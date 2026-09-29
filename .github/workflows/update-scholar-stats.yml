@@ -1,9 +1,16 @@
-name: Update Google Scholar statistics
+name: Update Google Scholar statistics manually
 
 on:
-  schedule:
-    - cron: "17 3 * * 1"
   workflow_dispatch:
+    inputs:
+      publications:
+        description: "Number of publications shown on Google Scholar"
+        required: true
+        type: string
+      citations:
+        description: "Total citations shown on Google Scholar"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -24,8 +31,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Refresh Scholar statistics
-        run: python scripts/update_scholar_stats.py
+      - name: Update Scholar statistics from the submitted values
+        run: >-
+          python scripts/update_scholar_stats.py
+          --publications "${{ inputs.publications }}"
+          --citations "${{ inputs.citations }}"
 
       - name: Commit updated values
         run: |
