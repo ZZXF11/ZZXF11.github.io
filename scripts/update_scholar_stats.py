@@ -41,7 +41,7 @@ def fetch_profile() -> str:
         return response.read().decode("utf-8", errors="replace")
 
 
-def parse_stats(profile: str) -> tuple[int, int, int, int]:
+def parse_stats(profile: str) -> tuple[int, int]:
     values = [
         int(html.unescape(value).replace(",", ""))
         for value in re.findall(
@@ -54,8 +54,8 @@ def parse_stats(profile: str) -> tuple[int, int, int, int]:
             "Google Scholar did not return the expected public profile markup; "
             "the existing homepage values were left unchanged."
         )
-    citations, h_index, i10_index = values[0], values[2], values[4]
-    return publications, citations, h_index, i10_index
+    citations = values[0]
+    return publications, citations
 
 
 def replace_value(document: str, element_id: str, value: int) -> str:
@@ -66,15 +66,10 @@ def replace_value(document: str, element_id: str, value: int) -> str:
     return updated
 
 
-def update_homepage(stats: tuple[int, int, int, int]) -> None:
+def update_homepage(stats: tuple[int, int]) -> None:
     document = INDEX.read_text(encoding="utf-8")
     for element_id, value in zip(
-        (
-            "scholar-publications",
-            "scholar-citations",
-            "scholar-h-index",
-            "scholar-i10-index",
-        ),
+        ("scholar-publications", "scholar-citations"),
         stats,
     ):
         document = replace_value(document, element_id, value)
@@ -102,8 +97,7 @@ def main() -> int:
     update_homepage(stats)
     print(
         "Updated Scholar statistics: "
-        f"publications={stats[0]}, citations={stats[1]}, "
-        f"h-index={stats[2]}, i10-index={stats[3]}"
+        f"publications={stats[0]}, citations={stats[1]}"
     )
     return 0
 
