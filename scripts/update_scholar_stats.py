@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import argparse
 import html
 import re
 import sys
@@ -104,11 +105,36 @@ def update_homepage(stats: tuple[int, int]) -> None:
     INDEX.write_text(document, encoding="utf-8", newline="\n")
 
 
+def positive_integer(value: str) -> int:
+    parsed = int(value)
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("value must be zero or greater")
+    return parsed
+
+
+def parse_arguments() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Update the Google Scholar statistics displayed on the homepage."
+    )
+    parser.add_argument("--publications", type=positive_integer)
+    parser.add_argument("--citations", type=positive_integer)
+    arguments = parser.parse_args()
+    if (arguments.publications is None) != (arguments.citations is None):
+        parser.error("--publications and --citations must be provided together")
+    return arguments
+
+
 def main() -> int:
-    stats = parse_stats(fetch_profile())
+    arguments = parse_arguments()
+    if arguments.publications is not None:
+        stats = (arguments.publications, arguments.citations)
+        source = "manual input"
+    else:
+        stats = parse_stats(fetch_profile())
+        source = "Google Scholar"
     update_homepage(stats)
     print(
-        "Updated Scholar statistics: "
+        f"Updated Scholar statistics from {source}: "
         f"publications={stats[0]}, citations={stats[1]}"
     )
     return 0
