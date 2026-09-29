@@ -13,6 +13,7 @@ from pathlib import Path
 
 
 SCHOLAR_ID = "KBJ9ooAAAAAJ"
+SCHOLAR_HOSTS = ("scholar.google.com.hk", "scholar.google.com")
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 
@@ -27,18 +28,29 @@ def fetch_profile() -> str:
             "pagesize": "100",
         }
     )
-    request = urllib.request.Request(
-        f"https://scholar.google.com/citations?{query}",
-        headers={
-            "User-Agent": (
-                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-            ),
-            "Accept-Language": "en-US,en;q=0.9",
-        },
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return response.read().decode("utf-8", errors="replace")
+    errors: list[str] = []
+    for host in SCHOLAR_HOSTS:
+        request = urllib.request.Request(
+            f"https://{host}/citations?{query}",
+            headers={
+                "User-Agent": (
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+                ),
+                "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Cache-Control": "no-cache",
+            },
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                profile = response.read().decode("utf-8", errors="replace")
+            if "gsc_rsb_std" in profile and "gsc_a_tr" in profile:
+                return profile
+            errors.append(f"{host}: profile markup was not returned")
+        except Exception as error:
+            errors.append(f"{host}: {error}")
+    raise RuntimeError("; ".join(errors))
 
 
 def parse_stats(profile: str) -> tuple[int, int]:
