@@ -66,6 +66,7 @@
     #publications > h2::before { content:"📚"; }
     #projects > h2::before { content:"🧩"; }
     #miscellaneous > h2::before { content:"✨"; }
+    #contact > h2::before { content:"✉️"; }
     h3 { margin:0 0 4px; color:var(--heading); font-size:1rem; line-height:1.45; }
     p { margin:0 0 1.2em; }
     .intro-links { margin-top:23px; font-size:.94rem; }
@@ -128,7 +129,10 @@
     .paper-highlight::before { content:'✦'; margin-right:7px; color:var(--accent); }
     .paper:hover .paper-highlight,.paper:focus-within .paper-highlight { max-height:5rem; margin:8px 0 7px; padding:8px 11px; border-color:color-mix(in srgb,var(--accent) 24%,transparent); opacity:1; transform:none; }
     .project-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-    .project { position:relative; min-height:150px; margin:0; padding:20px 20px 18px; border:1px solid #e3e9eb; border-radius:10px; background:linear-gradient(145deg,#fff,#f8fbfc); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+    .project { --spot-x:50%; --spot-y:50%; position:relative; isolation:isolate; overflow:hidden; min-height:150px; margin:0; padding:20px 20px 18px; border:1px solid #e3e9eb; border-radius:10px; background:linear-gradient(145deg,#fff,#f8fbfc); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+    .project::before { content:""; position:absolute; z-index:0; inset:0; pointer-events:none; opacity:0; background:radial-gradient(230px circle at var(--spot-x) var(--spot-y),color-mix(in srgb,var(--accent) 18%,transparent),transparent 68%); transition:opacity .25s ease; }
+    .project:hover::before,.project:focus-within::before { opacity:1; }
+    .project > * { position:relative; z-index:1; }
     .project:hover { transform:translateY(-3px); border-color:#b9d7df; box-shadow:0 10px 24px rgba(42,89,103,.10); }
     .project h3 { padding-right:32px; font-size:1.05rem; }
     .project h3::after { content:"↗"; position:absolute; top:17px; right:18px; color:#8bb9c5; font-size:1.1rem; }
@@ -144,11 +148,24 @@
     .misc-card:first-child h3::before { content:"📝 "; }
     .misc-card:last-child h3::before { content:"🎵 "; }
     .misc-card p { margin:0; color:#62686c; font-size:.91rem; }
+    .contact-card { position:relative; isolation:isolate; overflow:hidden; padding:30px 32px; border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line)); border-radius:18px; background:linear-gradient(130deg,color-mix(in srgb,var(--surface-solid) 92%,transparent),color-mix(in srgb,var(--accent) 8%,var(--surface-soft))); box-shadow:var(--shadow); }
+    .contact-card::after { content:""; position:absolute; z-index:-1; width:260px; height:260px; right:-100px; top:-145px; border-radius:50%; background:radial-gradient(circle,color-mix(in srgb,var(--accent-2) 20%,transparent),transparent 68%); }
+    .contact-card h3 { margin-bottom:9px; font-size:1.2rem; }
+    .contact-card p { max-width:720px; margin:0; color:var(--text); }
+    .contact-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+    .contact-actions a { display:inline-flex; align-items:center; justify-content:center; min-height:40px; padding:8px 15px; border:1px solid var(--line); border-radius:999px; background:var(--surface-solid); color:var(--link); font-size:.86rem; font-weight:700; transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+    .contact-actions a:first-child { border-color:transparent; background:linear-gradient(115deg,var(--accent),var(--accent-2)); color:#fff; box-shadow:0 9px 24px var(--glow); }
+    .contact-actions a:hover { transform:translateY(-2px); border-color:var(--accent); text-decoration:none; box-shadow:0 10px 24px var(--glow); }
     footer { margin-top:65px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:.8rem; }
     .image-lightbox { width:min(94vw,1100px); max-height:90vh; padding:44px 18px 18px; border:0; border-radius:10px; background:#fff; box-shadow:0 24px 80px rgba(0,0,0,.28); }
     .image-lightbox::backdrop { background:rgba(20,27,30,.72); }
-    .image-lightbox img { display:block; width:100%; max-height:calc(90vh - 70px); object-fit:contain; }
+    .image-lightbox img { display:block; width:100%; max-height:calc(90vh - 116px); object-fit:contain; }
+    .lightbox-caption { max-width:920px; margin:12px auto 0; color:var(--heading); text-align:center; font-size:.88rem; font-weight:700; line-height:1.45; }
     .lightbox-close { position:absolute; top:9px; right:11px; width:34px; height:34px; border:1px solid #d9dddf; border-radius:50%; background:#fff; color:#444; font-size:1.25rem; cursor:pointer; }
+    .back-to-top { position:fixed; z-index:35; right:22px; bottom:22px; display:inline-flex; align-items:center; gap:6px; min-height:42px; padding:8px 13px; border:1px solid var(--line); border-radius:999px; background:color-mix(in srgb,var(--surface-solid) 88%,transparent); color:var(--heading); box-shadow:0 12px 30px rgba(25,70,86,.16); opacity:0; transform:translateY(12px); pointer-events:none; cursor:pointer; backdrop-filter:blur(14px); transition:opacity .22s ease,transform .22s ease,border-color .22s ease; }
+    .back-to-top.is-visible { opacity:1; transform:none; pointer-events:auto; }
+    .back-to-top:hover { border-color:var(--accent); color:var(--link); }
+    .back-to-top span:first-child { color:var(--accent); font-size:1rem; font-weight:900; }
     .scroll-progress { position:fixed; z-index:40; top:0; left:0; width:100%; height:3px; transform:scaleX(0); transform-origin:left center; background:linear-gradient(90deg,var(--accent),var(--accent-2)); box-shadow:0 0 14px var(--glow); }
     .masthead { background:color-mix(in srgb,var(--surface-solid) 86%,transparent); border-color:var(--line); backdrop-filter:blur(18px) saturate(145%); -webkit-backdrop-filter:blur(18px) saturate(145%); }
     .site-name { color:var(--heading); letter-spacing:-.02em; }
@@ -245,6 +262,10 @@
       .paper-highlight { max-height:5rem; margin:8px 0 7px; padding:8px 11px; border-color:color-mix(in srgb,var(--accent) 20%,transparent); opacity:1; transform:none; }
       .lang-toggle { min-width:44px; min-height:40px; padding:5px 9px; }
       .theme-toggle { min-width:40px; min-height:40px; }
+      .contact-card { padding:24px 20px; }
+      .contact-actions { flex-direction:column; align-items:stretch; }
+      .back-to-top { right:14px; bottom:14px; padding:8px 11px; }
+      .back-to-top .back-label { display:none; }
     }
     @media (prefers-reduced-motion:reduce) {
       html { scroll-behavior:auto; }
@@ -315,10 +336,12 @@
       </div></section>
       <section id="honors"><h2 data-en="Honors" data-zh="荣誉">Honors</h2><div class="award-list"><article class="award-card"><div class="award-year">2024</div><span class="award-mark scholarship" role="img" aria-label="National Scholarship medal"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 5h14l-3 12h-8L17 5Z"/><path d="m18 6-5 13 7 2M30 6l5 13-7 2"/><circle cx="24" cy="29" r="11" fill="#fff3c4"/><path d="m24 23 1.9 3.8 4.2.6-3 3 .7 4.2-3.8-2-3.8 2 .7-4.2-3-3 4.2-.6L24 23Z"/></svg></span><div><h3 data-en="National Scholarship" data-zh="国家奖学金">National Scholarship</h3><p data-en="Ministry of Education of China" data-zh="中华人民共和国教育部">Ministry of Education of China</p></div></article><article class="award-card"><div class="award-year">2022</div><span class="award-mark scholarship" role="img" aria-label="National Scholarship medal"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 5h14l-3 12h-8L17 5Z"/><path d="m18 6-5 13 7 2M30 6l5 13-7 2"/><circle cx="24" cy="29" r="11" fill="#fff3c4"/><path d="m24 23 1.9 3.8 4.2.6-3 3 .7 4.2-3.8-2-3.8 2 .7-4.2-3-3 4.2-.6L24 23Z"/></svg></span><div><h3 data-en="National Scholarship" data-zh="国家奖学金">National Scholarship</h3><p data-en="Ministry of Education of China" data-zh="中华人民共和国教育部">Ministry of Education of China</p></div></article></div></section>
       <section id="miscellaneous"><h2 data-en="Miscellaneous" data-zh="其他">Miscellaneous</h2><div class="misc-grid"><article class="misc-card"><h3 data-en="Professional Service" data-zh="学术服务">Professional Service</h3><p><span data-en="Reviewer: " data-zh="审稿人：">Reviewer: </span>Pattern Recognition · AAAI · ACM Multimedia (ACM MM)</p></article><article class="misc-card"><h3 data-en="Interests" data-zh="兴趣爱好">Interests</h3><p data-en="Piano · Guitar · Playing in bands · Improvisational accompaniment · Football · Badminton" data-zh="钢琴 · 吉他 · 乐队演奏 · 即兴伴奏 · 足球 · 羽毛球">Piano · Guitar · Playing in bands · Improvisational accompaniment · Football · Badminton</p></article></div></section>
+      <section id="contact"><h2 data-en="Contact &amp; Collaboration" data-zh="联系与合作">Contact &amp; Collaboration</h2><div class="contact-card"><h3 data-en="Let’s build intelligent visual document systems together." data-zh="期待与你一起探索智能视觉文档系统。">Let’s build intelligent visual document systems together.</h3><p data-en="I welcome research discussions and open-source collaboration in document intelligence, multimodal OCR, AIGC, and cultural heritage digitization." data-zh="欢迎围绕文档智能、多模态 OCR、AIGC 与文化遗产数字化开展学术交流和开源合作。">I welcome research discussions and open-source collaboration in document intelligence, multimodal OCR, AIGC, and cultural heritage digitization.</p><div class="contact-actions"><a href="mailto:yuyi.zhang11@foxmail.com" data-en="Email Me" data-zh="发送邮件">Email Me</a><a href="https://scholar.google.com.hk/citations?user=KBJ9ooAAAAAJ&amp;hl=zh-CN" target="_blank" rel="noreferrer">Google Scholar</a><a href="https://github.com/ZZXF11" target="_blank" rel="noreferrer">GitHub</a></div></div></section>
       <footer>© <span id="year">2026</span> Yuyi Zhang. <span data-en="Last updated September 2026." data-zh="最后更新于 2026 年 9 月。">Last updated September 2026.</span></footer>
     </main>
   </div>
-  <dialog class="image-lightbox" id="image-lightbox" aria-label="Publication figure preview"><button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close preview">×</button><img id="lightbox-image" alt=""></dialog>
+  <dialog class="image-lightbox" id="image-lightbox" aria-label="Publication figure preview"><button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close preview">×</button><img id="lightbox-image" alt=""><p class="lightbox-caption" id="lightbox-caption"></p></dialog>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top"><span aria-hidden="true">↑</span><span class="back-label" data-en="Top" data-zh="顶部">Top</span></button>
   <script>
     document.getElementById('year').textContent=new Date().getFullYear();
     const languageButton=document.getElementById('lang-toggle');
@@ -329,6 +352,8 @@
     const menuButton=document.getElementById('menu-toggle');
     const lightbox=document.getElementById('image-lightbox');
     const lightboxImage=document.getElementById('lightbox-image');
+    const lightboxCaption=document.getElementById('lightbox-caption');
+    const backToTop=document.getElementById('back-to-top');
     let currentLanguage=localStorage.getItem('preferred-language')||'en';
     let currentTheme=document.documentElement.dataset.theme||'light';
 
@@ -463,6 +488,7 @@
       const openFigure=()=>{
         lightboxImage.src=image.currentSrc||image.src;
         lightboxImage.alt=image.alt;
+        lightboxCaption.textContent=title;
         lightbox.showModal();
       };
       figure.addEventListener('click',openFigure);
@@ -529,6 +555,13 @@
         actions.appendChild(link);
       });
       project.appendChild(actions);
+      if(matchMedia('(pointer:fine)').matches){
+        project.addEventListener('pointermove',(event)=>{
+          const bounds=project.getBoundingClientRect();
+          project.style.setProperty('--spot-x',`${event.clientX-bounds.left}px`);
+          project.style.setProperty('--spot-y',`${event.clientY-bounds.top}px`);
+        });
+      }
     });
 
     const updateControlLabels=()=>{
@@ -553,6 +586,7 @@
       languageButton.textContent=language==='zh'?'EN':'中';
       languageButton.setAttribute('aria-label',language==='zh'?'Switch to English':'切换为中文');
       document.title=language==='zh'?'张宇一｜个人主页':'Yuyi Zhang';
+      backToTop.setAttribute('aria-label',language==='zh'?'返回顶部':'Back to top');
       localStorage.setItem('preferred-language',language);
       updateControlLabels();
       updateThemeControl();
@@ -567,6 +601,7 @@
       const scrollable=document.documentElement.scrollHeight-innerHeight;
       const progress=scrollable>0?Math.min(1,Math.max(0,scrollY/scrollable)):0;
       progressBar.style.transform=`scaleX(${progress})`;
+      backToTop.classList.toggle('is-visible',scrollY>520);
       const marker=scrollY+parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height'))+120;
       let active=trackedSections[0];
       trackedSections.forEach((section)=>{if(section.offsetTop<=marker)active=section;});
@@ -579,6 +614,7 @@
     };
     addEventListener('scroll',()=>{if(!scrollTicking){scrollTicking=true;requestAnimationFrame(updateScrollState);}},{passive:true});
     addEventListener('resize',updateScrollState,{passive:true});
+    backToTop.addEventListener('click',()=>scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'}));
     updateScrollState();
 
     const revealTargets=[...document.querySelectorAll('main > section, footer')];
@@ -590,4 +626,3 @@
   </script>
 </body>
 </html>
-
